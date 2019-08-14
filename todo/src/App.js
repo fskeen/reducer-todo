@@ -1,24 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useReducer } from 'react';
 import './App.css';
+import { initialState, taskReducer } from './reducers/taskReducer'
+
+//local imports
+import Header from './components/Header'
+import Tasklist from './components/Tasklist'
+
+
 
 function App() {
+
+  const [state, dispatch] = useReducer(taskReducer, initialState);
+
+  const addTask = (task) => {
+    if (task)
+    return dispatch({ type: 'ADD_TASK', payload: task})
+  }
+
+  const toggle = (id) => {
+    dispatch({
+      type: 'TOGGLE_TODO',
+      payload: id
+    })
+  }
+
+  const clear = () => {
+    dispatch({type: "CLEAR_COMPLETED"})
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Tasklist addTask={addTask} state={state} dispatch={dispatch} toggle={toggle} clear={clear} />
     </div>
   );
 }
